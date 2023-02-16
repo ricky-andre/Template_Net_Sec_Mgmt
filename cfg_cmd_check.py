@@ -13,7 +13,7 @@ from openpyxl.styles import PatternFill
 # are present or not
 xls_cfg_miss = './Cfg_Check.xlsx'
 xls_ip_devices = './IpDevices_list.xlsx'
-cfg_root_dir = 'path_to_config_files'
+cfg_root_dir = 'root_path_to_config_files'
 # File that contains the configurations to be checked for every profile, and what to do in case
 # of mismatches (add a command in case something is missing, or remove/change a command)
 cfg_check_cmd = './cfg_cmd_check.xlsx'
@@ -31,9 +31,7 @@ gen_template = False
 gen_excel = True
 # check what needs to be fixed, using columns 'B' and 'C' in cfg_check_cmd excel file
 fix_cfg = False
-# if this is disabled, the commands that would be done on the target devices are just PRINTED on screen,
-# just to be sure of what's gonna happen, otherwise we try to connect to the target devices.
-fix_cfg_for_real = False
+
 
 profiles_filter = '.*'
 dev_filter = '.*'
