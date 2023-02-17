@@ -355,62 +355,6 @@ if gen_excel:
         targ.save(xls_cfg_miss)
         targ.close()
 
-
-def fix_cmd (tran, conn_prof, dev, mgmt_ip, host_tran, commands):
-    """
-    Parameters
-    ----------
-    tran : str
-        the connection protocol to the proxy or to the device
-    conn_prof : str
-        connection profile name, contains username/pwd for the proxy and the devices
-    dev : str
-        device hostname
-    mgmt_ip : str
-        mgmt ip address of the target device to connect to
-    host_tran : str
-        connection protocol from the proxy to the target device
-    commands : array of strings
-        list of all commands to be executed on the target device
-    """
-    # function that is launched as a thread and saves the target node's configuration.
-    try:
-        if tran == 'ssh':
-            cnt_mgr = ssh_manager(conn_prof)
-        else:
-            cnt_mgr = telnet_manager(conn_prof)
-    except Exception as err:
-        print('Unable to connect '+str(err)+' device '+dev)
-        return
-    res = 404
-    vendor = 'cisco'
-    if 'vendor' in conn_data[conn_prof]:
-        vendor = conn_data[conn_prof]['vendor']
-    try:
-        cnt_mgr.setTransport(host_tran)
-        res = cnt_mgr.node_login(mgmt_ip, router = dev)
-        if res != CONN_SUCCESS:
-            print('connection error for '+dev)
-            return
-    except Exception as err:
-        print('Unable to connect to '+dev+' mgmt ip ' + mgmt_ip+' exception '+str(err))
-        return
-    try:
-        if vendor == 'cisco':
-            cnt_mgr.run_cmd("terminal length 0")
-        cnt_mgr.conf_t()
-        for cmd in range(0, len(commands)):
-            cnt_mgr.run_cmd(cmd)
-        cnt_mgr.exit_conf_t()
-        cnt_mgr.run_cmd('write memory')
-    except Exception as err:
-        print('Unable to execute command '+cmd+', error '+str(err)+' on device '+dev)
-        return
-    cnt_mgr.node_logout()
-    cnt_mgr.close()
-    print('Executed thread for '+dev+' time %d:%d:%d' % (now.hour, now.minute, now.second))
-
-
 def fill_cmd_with_vars (dev, cmd, vars):
     """
     Parameters
